@@ -6,8 +6,8 @@ describe "trencitos para todos" {
 	var vagonDeCarga1 = new VagonDeCarga(cargaMaxima = 15000)
 	var vagonDeCarga2 = new VagonDeCarga(cargaMaxima = 8000)
 	// vagones de pasajeros
-	var vagonDePasajeros1 = new VagonDePasajeros(ancho = 2, largo = 2.5)
-	var vagonDePasajeros2 = new VagonDePasajeros(ancho = 2, largo = 7)
+	var vagonDePasajeros1 = new VagonDePasajeros(ancho = 2, largo = 2.5,banios = 10)
+	var vagonDePasajeros2 = new VagonDePasajeros(ancho = 2, largo = 7, banios = 5)
 	// locomotoras
 	var locomotora1 = new Locomotora(
 		peso = 1000, pesoMaxArrastre = 15000, velocidadMaxima = 80)
@@ -15,17 +15,20 @@ describe "trencitos para todos" {
 		peso = 800, pesoMaxArrastre = 11000, velocidadMaxima = 100)
 	var locomotora3 = new Locomotora(
 		peso=500, pesoMaxArrastre = 8000, velocidadMaxima = 50)
-	
+	var locomotora4 = new Locomotora(
+		peso = 10000, pesoMaxArrastre=10100, velocidadMaxima=100)
 	// formaciones
 	
 	var formacion1 = new Formacion()
 	var formacion2 = new Formacion()
+	var formacion3 = new Formacion()
+	var formacion4 = new Formacion()
 	// depositos
 	
 	var deposito1 = new Deposito(
-		formacionesArmadas=formacion1,locomotorasSueltas=locomotora1)
+		formacionesArmadas=#{formacion1,formacion4},locomotorasSueltas=#{locomotora1})
 	var deposito2 = new Deposito(
-		formacionesArmadas=formacion2,locomotorasSueltas=locomotora2)	
+		formacionesArmadas=#{formacion2,formacion3,formacion1},locomotorasSueltas=#{locomotora2,locomotora1,locomotora3})	
 	
 	fixture{
 		formacion1.agregarLocomotora(locomotora1)
@@ -35,6 +38,12 @@ describe "trencitos para todos" {
 		formacion2.agregarLocomotora(locomotora2)
 		formacion2.agregarVagon(vagonDePasajeros1)
 		formacion2.agregarVagon(vagonDePasajeros2)
+		formacion3.agregarVagon(vagonDeCarga2)
+		formacion3.agregarLocomotora(locomotora4)
+		formacion4.agregarLocomotora(locomotora1)
+		formacion4.agregarVagon(vagonDePasajeros1)
+		formacion4.agregarVagon(vagonDePasajeros2)
+		formacion4.agregarVagon(vagonDeCarga2)
 	}
 	
 	test "vagones livianos"{
@@ -46,6 +55,40 @@ describe "trencitos para todos" {
 	}
 	
 	test "es eficiente"{
-		assert.that(formacion2.esEficiente())
+		assert.that(formacion2.esEficiente())	
 	}
+	
+	test "no es eficiente"{
+		assert.that(!formacion3.esEficiente())
+	}
+	
+	test "puede moverse"{
+		assert.that(formacion2.sePuedeMover())
+	}
+	
+	test "no puede moverse"{
+		assert.that(!formacion1.sePuedeMover())
+	}
+	
+	test "no le faltan kilos de faltantes"{
+		assert.equals(formacion2.kilosDeEmpujeFaltantes(),0)
+	}
+	
+	test "faltan kilos de empuje"{
+		assert.equals(formacion1.kilosDeEmpujeFaltantes(),1820)
+	}
+	
+	test "vagones mas pesados"{
+		assert.equals(deposito1.vagonesMasPesados(),#{vagonDeCarga2,vagonDeCarga1})
+	}
+	
+	test "es formacion compleja" {
+		assert.that(formacion1.esCompleja())
+	}
+	
+	test "agregar locomotora para mover"{
+		deposito2.agregarLocomotoraParaMover(formacion1)
+		assert.that(formacion1.sePuedeMover())
+	}
+	
 }
