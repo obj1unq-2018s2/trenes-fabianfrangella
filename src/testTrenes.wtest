@@ -17,6 +17,9 @@ describe "trencitos para todos" {
 		peso=500, pesoMaxArrastre = 8000, velocidadMaxima = 50)
 	var locomotora4 = new Locomotora(
 		peso = 10000, pesoMaxArrastre=10100, velocidadMaxima=100)
+	var locomotora5 = new Locomotora(
+		peso=100,pesoMaxArrastre=3000,velocidadMaxima=60
+	)
 	// formaciones
 	
 	var formacion1 = new Formacion()
@@ -28,7 +31,8 @@ describe "trencitos para todos" {
 	var deposito1 = new Deposito(
 		formacionesArmadas=#{formacion1,formacion4},locomotorasSueltas=#{locomotora1})
 	var deposito2 = new Deposito(
-		formacionesArmadas=#{formacion2,formacion3,formacion1},locomotorasSueltas=#{locomotora2,locomotora1,locomotora3})	
+		formacionesArmadas=
+			#{formacion1},locomotorasSueltas=#{locomotora1,locomotora3,locomotora5})	
 	
 	fixture{
 		formacion1.agregarLocomotora(locomotora1)
