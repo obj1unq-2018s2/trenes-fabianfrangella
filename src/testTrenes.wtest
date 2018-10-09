@@ -5,9 +5,11 @@ describe "trencitos para todos" {
 	// vagones de carga
 	var vagonDeCarga1 = new VagonDeCarga(cargaMaxima = 15000)
 	var vagonDeCarga2 = new VagonDeCarga(cargaMaxima = 8000)
+	var vagonDeCarga3 = new VagonDeCarga(cargaMaxima = 500)
 	// vagones de pasajeros
 	var vagonDePasajeros1 = new VagonDePasajeros(ancho = 2, largo = 2.5,banios = 10)
 	var vagonDePasajeros2 = new VagonDePasajeros(ancho = 2, largo = 7, banios = 5)
+	var vagonLiviano = new VagonDePasajeros(ancho = 1, largo = 2, banios = 2)
 	// locomotoras
 	var locomotora1 = new Locomotora(
 		peso = 1000, pesoMaxArrastre = 15000, velocidadMaxima = 80)
@@ -18,14 +20,24 @@ describe "trencitos para todos" {
 	var locomotora4 = new Locomotora(
 		peso = 10000, pesoMaxArrastre=10100, velocidadMaxima=100)
 	var locomotora5 = new Locomotora(
-		peso=100,pesoMaxArrastre=3000,velocidadMaxima=60
-	)
+		peso=100,pesoMaxArrastre=3000,velocidadMaxima=60)
+	var locomotora6 = new Locomotora(
+		peso = 100, pesoMaxArrastre = 30000, velocidadMaxima = 350)
+	
+	
 	// formaciones
+	
+	var largaDist1 = new FormacionDeLargaDistancia(ciudadesQueUne=2)
+		
+	var largaDist2 = new FormacionDeLargaDistancia(ciudadesQueUne=3)
+	
+	var altaVel1 = new FormacionDeAltaVelocidad()
 	
 	var formacion1 = new Formacion()
 	var formacion2 = new Formacion()
 	var formacion3 = new Formacion()
 	var formacion4 = new Formacion()
+	var formacion5 = new Formacion()
 	// depositos
 	
 	var deposito1 = new Deposito(
@@ -48,6 +60,16 @@ describe "trencitos para todos" {
 		formacion4.agregarVagon(vagonDePasajeros1)
 		formacion4.agregarVagon(vagonDePasajeros2)
 		formacion4.agregarVagon(vagonDeCarga2)
+		altaVel1.agregarLocomotora(locomotora6)
+		altaVel1.agregarVagon(vagonDeCarga3)
+		largaDist1.agregarLocomotora(locomotora2)
+		largaDist2.agregarLocomotora(locomotora3)
+		largaDist1.agregarVagon(vagonDeCarga1)
+		largaDist1.agregarVagon(vagonDeCarga2)
+		largaDist2.agregarVagon(vagonDePasajeros1)
+		largaDist2.agregarVagon(vagonDePasajeros2)
+		formacion5.agregarLocomotora(locomotora2)
+		formacion5.agregarVagon(vagonDeCarga2)
 	}
 	
 	test "vagones livianos"{
@@ -93,6 +115,12 @@ describe "trencitos para todos" {
 	test "agregar locomotora para mover"{
 		deposito2.agregarLocomotoraParaMover(formacion1)
 		assert.that(formacion1.sePuedeMover())
+	}
+	
+	test "formaciones estan bien armadas" {
+	    assert.that(formacion5.estaBienArmada())
+		assert.that(largaDist2.estaBienArmada())
+		assert.that(altaVel1.estaBienArmada())
 	}
 	
 }

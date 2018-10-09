@@ -17,8 +17,7 @@ class Deposito {
 		locomotorasSueltas.any{ locomotora => locomotora.arrastreUtil() >= formacion.kilosDeEmpujeFaltantes() }
 	
 	method esLocomotoraUtilPara(locomotora,formacion) =
-		locomotora.arrastreUtil() > formacion.kilosDeEmpujeFaltantes()
-	
+		locomotora.arrastreUtil() >= formacion.kilosDeEmpujeFaltantes()
 		
 	method getLocomotoraUtilPara(formacion) =
 		locomotorasSueltas.find{locomotora=>self.esLocomotoraUtilPara(locomotora,formacion)}
@@ -124,7 +123,7 @@ class FormacionDeLargaDistancia {
 	var locomotoras = #{}
 	var ciudadesQueUne // numero
 	
-	method limiteDeVelocidad() = if (ciudadesQueUne>=2) 200 else 150
+	method limiteDeVelocidad() = if (ciudadesQueUne==2) 200 else 150
 	
 	method agregarLocomotora(locomotora) {
 		locomotoras.add(locomotora)
@@ -162,15 +161,14 @@ class FormacionDeLargaDistancia {
 	
 	method cantidadDeBanios() = vagones.sum{ vagon => vagon.banios() }
 	
-	method tieneBaniosSuficientes() = self.cantidadDeBanios() == self.cantidadDePasajeros() / 50
+	method tieneBaniosSuficientes() = self.cantidadDeBanios() >= self.cantidadDePasajeros() / 50
 	
 	method estaBienArmada() = self.sePuedeMover() && self.tieneBaniosSuficientes()
 }
 
-class FormacionesDeAltaVelocidad{
+class FormacionDeAltaVelocidad{
 	var vagones = #{}
 	var locomotoras = #{}
-	var ciudadesQueUne // numero
 	
 	method limiteDeVelocidad() = 400
 	
@@ -184,7 +182,14 @@ class FormacionesDeAltaVelocidad{
 
 	method vagonesLivianos() = vagones.count{ vagon => vagon.esLiviano() }
 
-	method velocidadMaxima() = locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+	method velocidadMaxima(){
+//		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()<250){
+//			return 250
+//		} else {
+			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+//		}
+		
+	} 
 
 	method pesoTotalVagones() = vagones.sum{ vagon => vagon.pesoMaximo() }
 
@@ -210,7 +215,7 @@ class FormacionesDeAltaVelocidad{
 	
 	method cantidadDeBanios() = vagones.sum{ vagon => vagon.banios() }
 	
-	method tieneBaniosSuficientes() = self.cantidadDeBanios() == self.cantidadDePasajeros() / 50
+	method tieneBaniosSuficientes() = true
 	
 	method estaBienArmada() = self.sePuedeMover() && self.velocidadMaxima() > 250 && vagones.all{ vagon => vagon.esLiviano() }
 }
