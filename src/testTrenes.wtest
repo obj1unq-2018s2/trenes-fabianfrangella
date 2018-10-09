@@ -1,0 +1,51 @@
+import trenes.*
+
+describe "trencitos para todos" {
+
+	// vagones de carga
+	var vagonDeCarga1 = new VagonDeCarga(cargaMaxima = 15000)
+	var vagonDeCarga2 = new VagonDeCarga(cargaMaxima = 8000)
+	// vagones de pasajeros
+	var vagonDePasajeros1 = new VagonDePasajeros(ancho = 2, largo = 2.5)
+	var vagonDePasajeros2 = new VagonDePasajeros(ancho = 2, largo = 7)
+	// locomotoras
+	var locomotora1 = new Locomotora(
+		peso = 1000, pesoMaxArrastre = 15000, velocidadMaxima = 80)
+	var locomotora2 = new Locomotora(
+		peso = 800, pesoMaxArrastre = 11000, velocidadMaxima = 100)
+	var locomotora3 = new Locomotora(
+		peso=500, pesoMaxArrastre = 8000, velocidadMaxima = 50)
+	
+	// formaciones
+	
+	var formacion1 = new Formacion()
+	var formacion2 = new Formacion()
+	// depositos
+	
+	var deposito1 = new Deposito(
+		formacionesArmadas=formacion1,locomotorasSueltas=locomotora1)
+	var deposito2 = new Deposito(
+		formacionesArmadas=formacion2,locomotorasSueltas=locomotora2)	
+	
+	fixture{
+		formacion1.agregarLocomotora(locomotora1)
+		formacion1.agregarLocomotora(locomotora3)
+		formacion1.agregarVagon(vagonDeCarga1)
+		formacion1.agregarVagon(vagonDeCarga2)
+		formacion2.agregarLocomotora(locomotora2)
+		formacion2.agregarVagon(vagonDePasajeros1)
+		formacion2.agregarVagon(vagonDePasajeros2)
+	}
+	
+	test "vagones livianos"{
+		assert.equals(formacion2.vagonesLivianos(),1)
+	}
+	
+	test "velocidad maxima de una formacion"{
+		assert.equals(formacion1.velocidadMaxima(),locomotora3.velocidadMaxima())
+	}
+	
+	test "es eficiente"{
+		assert.that(formacion2.esEficiente())
+	}
+}

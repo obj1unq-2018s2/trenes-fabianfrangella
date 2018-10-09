@@ -1,7 +1,7 @@
 class Deposito {
 
-	var formacionesArmadas
-	var locomotorasSueltas
+	var formacionesArmadas // es un conjunto
+	var locomotorasSueltas // es un conjunto
 
 	method vagonesMasPesados() = formacionesArmadas.filter{ formacion => formacion.vagonMasPesado() }.asSet()
 
@@ -65,10 +65,14 @@ class Formacion {
 	method agregarLocomotora(locomotora) {
 		locomotoras.add(locomotora)
 	}
+	
+	method agregarVagon(vagon){
+		vagones.add(vagon)
+	}
 
 	method vagonesLivianos() = vagones.count{ vagon => vagon.esLiviano() }
 
-	method velocidadMaxima() = locomotoras.min{ locomotora => locomotora.velocidadMaxima() }
+	method velocidadMaxima() = locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
 
 	method pesoTotalVagones() = vagones.sum{ vagon => vagon.pesoMaximo() }
 
