@@ -129,7 +129,13 @@ class FormacionDeLargaDistancia inherits Formacion {
 
 	method limiteDeVelocidad() = if (ciudadesQueUne == 2) 200 else 150
 
-	method velocidadMaxima() = locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+	method velocidadMaxima() {
+		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()){
+			return self.limiteDeVelocidad()
+		} else {
+			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+		}
+	} 
 
 	method tieneBaniosSuficientes() = self.cantidadDeBanios() >= self.cantidadDePasajeros() / 50
 
@@ -141,7 +147,11 @@ class FormacionDeAltaVelocidad inherits Formacion {
 	method limiteDeVelocidad() = 400
 
 	method velocidadMaxima() {
-		return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()){
+			return self.limiteDeVelocidad()
+		} else {
+			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+		}
 	}
 
 	method tieneBaniosSuficientes() = true

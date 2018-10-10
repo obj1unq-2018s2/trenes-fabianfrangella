@@ -123,4 +123,11 @@ describe "trencitos para todos" {
 		assert.that(altaVel1.estaBienArmada())
 	}
 	
+	test "limite de velocidad"{
+		assert.equals(altaVel1.velocidadMaxima(),350)
+		assert.equals(largaDist2.velocidadMaxima(),50)
+		assert.equals(formacion1.velocidadMaxima(),50)
+	}
+	
+	
 }
