@@ -9,7 +9,6 @@ describe "trencitos para todos" {
 	// vagones de pasajeros
 	var vagonDePasajeros1 = new VagonDePasajeros(ancho = 2, largo = 2.5,banios = 10)
 	var vagonDePasajeros2 = new VagonDePasajeros(ancho = 2, largo = 7, banios = 5)
-	var vagonLiviano = new VagonDePasajeros(ancho = 1, largo = 2, banios = 2)
 	// locomotoras
 	var locomotora1 = new Locomotora(
 		peso = 1000, pesoMaxArrastre = 15000, velocidadMaxima = 80)
