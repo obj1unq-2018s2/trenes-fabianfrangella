@@ -44,7 +44,9 @@ describe "trencitos para todos" {
 	var deposito2 = new Deposito(
 		formacionesArmadas=
 			#{formacion1},locomotorasSueltas=#{locomotora1,locomotora3,locomotora5})	
-	
+	var deposito3 = new Deposito(
+		formacionesArmadas=
+		#{formacion2,formacion3},locomotorasSueltas=#{locomotora1,locomotora3,locomotora5})
 	fixture{
 		formacion1.agregarLocomotora(locomotora1)
 		formacion1.agregarLocomotora(locomotora3)
@@ -112,8 +114,11 @@ describe "trencitos para todos" {
 	}
 	
 	test "agregar locomotora para mover"{
-		deposito2.agregarLocomotoraParaMover(formacion1)
-		assert.that(formacion1.sePuedeMover())
+		deposito2.agregarLocomotoraParaMover(formacion3)
+		deposito3.agregarLocomotoraParaMover(formacion2)
+		assert.that(formacion2.sePuedeMover())
+		assert.that(formacion3.sePuedeMover())
+		
 	}
 	
 	test "formaciones estan bien armadas" {
