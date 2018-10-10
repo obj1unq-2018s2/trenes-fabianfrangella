@@ -33,11 +33,11 @@ describe "trencitos para todos" {
 	
 	var altaVel1 = new FormacionDeAltaVelocidad()
 	
-	var formacion1 = new Formacion()
-	var formacion2 = new Formacion()
-	var formacion3 = new Formacion()
-	var formacion4 = new Formacion()
-	var formacion5 = new Formacion()
+	var formacion1 = new FormacionDeCortaDistancia()
+	var formacion2 = new FormacionDeCortaDistancia()
+	var formacion3 = new FormacionDeCortaDistancia()
+	var formacion4 = new FormacionDeCortaDistancia()
+	var formacion5 = new FormacionDeCortaDistancia()
 	// depositos
 	
 	var deposito1 = new Deposito(

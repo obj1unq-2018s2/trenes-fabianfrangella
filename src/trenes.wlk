@@ -69,12 +69,8 @@ class Locomotora {
 }
 
 class Formacion {
-
 	var vagones = #{}
 	var locomotoras = #{}
-	
-	method locomotoras() = locomotoras
-	method limiteDeVelocidad() = 60
 	
 	method agregarLocomotora(locomotora) {
 		locomotoras.add(locomotora)
@@ -85,6 +81,37 @@ class Formacion {
 	}
 
 	method vagonesLivianos() = vagones.count{ vagon => vagon.esLiviano() }
+
+	method pesoTotalVagones() = vagones.sum{ vagon => vagon.pesoMaximo() }
+
+	method pesoTotalLocomotoras() = locomotoras.sum{ locomotora => locomotora.peso() }
+
+	method arrastreUtilTotal() = locomotoras.sum{ locomotora => locomotora.arrastreUtil() }
+
+	method esEficiente() = locomotoras.all{ locomotora => locomotora.arrastreUtil() >= locomotora.peso() * 5 }
+
+	method sePuedeMover() = self.arrastreUtilTotal() >= self.pesoTotalVagones()
+
+	method kilosDeEmpujeFaltantes() = if (self.sePuedeMover()) 0 else self.pesoTotalVagones() - self.arrastreUtilTotal()
+
+	method vagonMasPesado() = vagones.max{ vagon => vagon.pesoMaximo() }
+
+	method cantUnidades() = vagones.size() + locomotoras.size()
+
+	method pesoTotal() = self.pesoTotalVagones() + self.pesoTotalLocomotoras()
+
+	method esCompleja() = self.cantUnidades() > 20 || self.pesoTotal() > 10000
+	
+	method cantidadDePasajeros() = vagones.sum{ vagon => vagon.pasajerosQuePuedeTransportar() }
+
+	method cantidadDeBanios() = vagones.sum{ vagon => vagon.banios() }
+	
+	
+}
+
+class FormacionDeCortaDistancia inherits Formacion  {
+	
+	method limiteDeVelocidad() = 60
 
 	method velocidadMaxima() {
 		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()) {
@@ -93,130 +120,32 @@ class Formacion {
 			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
 		}
 	}
-	method pesoTotalVagones() = vagones.sum{ vagon => vagon.pesoMaximo() }
-
-	method pesoTotalLocomotoras() = locomotoras.sum{ locomotora => locomotora.peso() }
-
-	method arrastreUtilTotal() = locomotoras.sum{ locomotora => locomotora.arrastreUtil() }
-
-	method esEficiente() = locomotoras.all{ locomotora => locomotora.arrastreUtil() >= locomotora.peso() * 5 }
-
-	method sePuedeMover() = self.arrastreUtilTotal() >= self.pesoTotalVagones()
-
-	method kilosDeEmpujeFaltantes() = if (self.sePuedeMover()) 0 else self.pesoTotalVagones() - self.arrastreUtilTotal()
-
-	method vagonMasPesado() = vagones.max{ vagon => vagon.pesoMaximo() }
-
-	method cantUnidades() = vagones.size() + locomotoras.size()
-
-	method pesoTotal() = self.pesoTotalVagones() + self.pesoTotalLocomotoras()
-
-	method esCompleja() = self.cantUnidades() > 20 || self.pesoTotal() > 10000
-	
 	method estaBienArmada() = self.sePuedeMover() && !self.esCompleja()
-
 }
 
-class FormacionDeLargaDistancia {
-	
-	var vagones = #{}
-	var locomotoras = #{}
-	var ciudadesQueUne // numero
-	
-	method limiteDeVelocidad() = if (ciudadesQueUne==2) 200 else 150
-	
-	method agregarLocomotora(locomotora) {
-		locomotoras.add(locomotora)
-	}
-	
-	method agregarVagon(vagon){
-		vagones.add(vagon)
-	}
+class FormacionDeLargaDistancia inherits Formacion {
 
-	method vagonesLivianos() = vagones.count{ vagon => vagon.esLiviano() }
+	var ciudadesQueUne // numero
+
+	method limiteDeVelocidad() = if (ciudadesQueUne == 2) 200 else 150
 
 	method velocidadMaxima() = locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
 
-	method pesoTotalVagones() = vagones.sum{ vagon => vagon.pesoMaximo() }
-
-	method pesoTotalLocomotoras() = locomotoras.sum{ locomotora => locomotora.peso() }
-
-	method arrastreUtilTotal() = locomotoras.sum{ locomotora => locomotora.arrastreUtil() }
-
-	method esEficiente() = locomotoras.all{ locomotora => locomotora.arrastreUtil() >= locomotora.peso() * 5 }
-
-	method sePuedeMover() = self.arrastreUtilTotal() >= self.pesoTotalVagones()
-
-	method kilosDeEmpujeFaltantes() = if (self.sePuedeMover()) 0 else self.pesoTotalVagones() - self.arrastreUtilTotal()
-
-	method vagonMasPesado() = vagones.max{ vagon => vagon.pesoMaximo() }
-
-	method cantUnidades() = vagones.size() + locomotoras.size()
-
-	method pesoTotal() = self.pesoTotalVagones() + self.pesoTotalLocomotoras()
-
-	method esCompleja() = self.cantUnidades() > 20 || self.pesoTotal() > 10000
-	
-	method cantidadDePasajeros() = vagones.sum{ vagon => vagon.pasajerosQuePuedeTransportar() }
-	
-	method cantidadDeBanios() = vagones.sum{ vagon => vagon.banios() }
-	
 	method tieneBaniosSuficientes() = self.cantidadDeBanios() >= self.cantidadDePasajeros() / 50
-	
+
 	method estaBienArmada() = self.sePuedeMover() && self.tieneBaniosSuficientes()
 }
 
-class FormacionDeAltaVelocidad{
-	var vagones = #{}
-	var locomotoras = #{}
+class FormacionDeAltaVelocidad inherits Formacion {
 	
 	method limiteDeVelocidad() = 400
-	
-	method agregarLocomotora(locomotora) {
-		locomotoras.add(locomotora)
-	}
-	
-	method agregarVagon(vagon){
-		vagones.add(vagon)
+
+	method velocidadMaxima() {
+		return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
 	}
 
-	method vagonesLivianos() = vagones.count{ vagon => vagon.esLiviano() }
-
-	method velocidadMaxima(){
-//		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()<250){
-//			return 250
-//		} else {
-			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
-//		}
-		
-	} 
-
-	method pesoTotalVagones() = vagones.sum{ vagon => vagon.pesoMaximo() }
-
-	method pesoTotalLocomotoras() = locomotoras.sum{ locomotora => locomotora.peso() }
-
-	method arrastreUtilTotal() = locomotoras.sum{ locomotora => locomotora.arrastreUtil() }
-
-	method esEficiente() = locomotoras.all{ locomotora => locomotora.arrastreUtil() >= locomotora.peso() * 5 }
-
-	method sePuedeMover() = self.arrastreUtilTotal() >= self.pesoTotalVagones()
-
-	method kilosDeEmpujeFaltantes() = if (self.sePuedeMover()) 0 else self.pesoTotalVagones() - self.arrastreUtilTotal()
-
-	method vagonMasPesado() = vagones.max{ vagon => vagon.pesoMaximo() }
-
-	method cantUnidades() = vagones.size() + locomotoras.size()
-
-	method pesoTotal() = self.pesoTotalVagones() + self.pesoTotalLocomotoras()
-
-	method esCompleja() = self.cantUnidades() > 20 || self.pesoTotal() > 10000
-	
-	method cantidadDePasajeros() = vagones.sum{ vagon => vagon.pasajerosQuePuedeTransportar() }
-	
-	method cantidadDeBanios() = vagones.sum{ vagon => vagon.banios() }
-	
 	method tieneBaniosSuficientes() = true
-	
+
 	method estaBienArmada() = self.sePuedeMover() && self.velocidadMaxima() > 250 && vagones.all{ vagon => vagon.esLiviano() }
 }
 
