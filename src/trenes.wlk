@@ -154,8 +154,6 @@ class FormacionDeAltaVelocidad inherits Formacion {
 		}
 	}
 
-	method tieneBaniosSuficientes() = true
-
 	method estaBienArmada() = self.sePuedeMover() && self.velocidadMaxima() > 250 && vagones.all{ vagon => vagon.esLiviano() }
 }
 
