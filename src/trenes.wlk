@@ -140,10 +140,12 @@ class FormacionDeLargaDistancia inherits Formacion {
 	override method estaBienArmada() = super() && self.tieneBaniosSuficientes()
 }
 
-class FormacionDeAltaVelocidad inherits Formacion {
+class FormacionDeAltaVelocidad inherits FormacionDeLargaDistancia {
+	
+	method todosLosVagonesSonLivianos() = vagones.all{ vagon => vagon.esLiviano() }
 	
 	override method limiteDeVelocidad() = 400
 
-	override method estaBienArmada() = super() && self.velocidadMaxima() > 250 && vagones.all{ vagon => vagon.esLiviano() }
+	override method estaBienArmada() = super() && self.velocidadMaxima() > 250 && self.todosLosVagonesSonLivianos()
 }
 
