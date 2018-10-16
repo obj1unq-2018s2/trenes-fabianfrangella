@@ -24,7 +24,14 @@ class Deposito {
 	
 }
 
-class VagonDePasajeros {
+class Vagon {
+	
+	method pesoMaximo()
+
+	method esLiviano() = self.pesoMaximo() < 2500
+}
+
+class VagonDePasajeros inherits Vagon {
 
 	var largo
 	var ancho
@@ -32,22 +39,17 @@ class VagonDePasajeros {
 	
 	method pasajerosQuePuedeTransportar() = if (ancho <= 2.5) largo * 8 else largo * 10
 
-	method pesoMaximo() = self.pasajerosQuePuedeTransportar() * 80
+	override method pesoMaximo() = self.pasajerosQuePuedeTransportar() * 80
 
-	method esLiviano() = self.pesoMaximo() < 2500
-	
 	method banios() = banios
 	
-
 }
 
-class VagonDeCarga {
+class VagonDeCarga inherits Vagon {
 
 	var cargaMaxima
 
-	method pesoMaximo() = cargaMaxima + 160
-
-	method esLiviano() = self.pesoMaximo() < 2500
+	override method pesoMaximo() = cargaMaxima + 160
 	
 	method pasajerosQuePuedeTransportar() = 0
 	
@@ -106,12 +108,7 @@ class Formacion {
 
 	method cantidadDeBanios() = vagones.sum{ vagon => vagon.banios() }
 	
-	
-}
-
-class FormacionDeCortaDistancia inherits Formacion  {
-	
-	method limiteDeVelocidad() = 60
+	method limiteDeVelocidad()
 
 	method velocidadMaxima() {
 		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()) {
@@ -120,40 +117,33 @@ class FormacionDeCortaDistancia inherits Formacion  {
 			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
 		}
 	}
-	method estaBienArmada() = self.sePuedeMover() && !self.esCompleja()
+	
+	method estaBienArmada() = self.sePuedeMover()	
+	
+}
+
+class FormacionDeCortaDistancia inherits Formacion  {
+	
+	override method limiteDeVelocidad() = 60
+
+	override method estaBienArmada() = super() && !self.esCompleja()
 }
 
 class FormacionDeLargaDistancia inherits Formacion {
 
 	var ciudadesQueUne // numero
 
-	method limiteDeVelocidad() = if (ciudadesQueUne == 2) 200 else 150
-
-	method velocidadMaxima() {
-		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()){
-			return self.limiteDeVelocidad()
-		} else {
-			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
-		}
-	} 
+	override method limiteDeVelocidad() = if (ciudadesQueUne == 2) 200 else 150 
 
 	method tieneBaniosSuficientes() = self.cantidadDeBanios() >= self.cantidadDePasajeros() / 50
 
-	method estaBienArmada() = self.sePuedeMover() && self.tieneBaniosSuficientes()
+	override method estaBienArmada() = super() && self.tieneBaniosSuficientes()
 }
 
 class FormacionDeAltaVelocidad inherits Formacion {
 	
-	method limiteDeVelocidad() = 400
+	override method limiteDeVelocidad() = 400
 
-	method velocidadMaxima() {
-		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()){
-			return self.limiteDeVelocidad()
-		} else {
-			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
-		}
-	}
-
-	method estaBienArmada() = self.sePuedeMover() && self.velocidadMaxima() > 250 && vagones.all{ vagon => vagon.esLiviano() }
+	override method estaBienArmada() = super() && self.velocidadMaxima() > 250 && vagones.all{ vagon => vagon.esLiviano() }
 }
 

@@ -97,7 +97,7 @@ describe "trencitos para todos" {
 		assert.that(!formacion1.sePuedeMover())
 	}
 	
-	test "no le faltan kilos de faltantes"{
+	test "no le faltan kilos de empuje"{
 		assert.equals(formacion2.kilosDeEmpujeFaltantes(),0)
 	}
 	
