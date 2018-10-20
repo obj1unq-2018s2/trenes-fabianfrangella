@@ -26,11 +26,9 @@ describe "trencitos para todos" {
 	
 	// formaciones
 	
-	var largaDist1 = new FormacionDeLargaDistancia(ciudadesQueUne=2)
-		
-	var largaDist2 = new FormacionDeLargaDistancia(ciudadesQueUne=3)
-	
-	var altaVel1 = new FormacionDeAltaVelocidad()
+	var largaDist1 = new FormacionDeLargaDistancia(ciudadesQueUne = 2)
+	var largaDist2 = new FormacionDeLargaDistancia(ciudadesQueUne = 3)
+	var altaVel1 = new FormacionDeAltaVelocidad(ciudadesQueUne = 2)
 	
 	var formacion1 = new FormacionDeCortaDistancia()
 	var formacion2 = new FormacionDeCortaDistancia()

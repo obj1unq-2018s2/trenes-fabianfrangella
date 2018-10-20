@@ -111,7 +111,8 @@ class Formacion {
 	method limiteDeVelocidad()
 
 	method velocidadMaxima() {
-		if (locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima() > self.limiteDeVelocidad()) {
+		const velMax = locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
+		if (velMax > self.limiteDeVelocidad()) {
 			return self.limiteDeVelocidad()
 		} else {
 			return locomotoras.min{ locomotora => locomotora.velocidadMaxima() }.velocidadMaxima()
